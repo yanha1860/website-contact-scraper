@@ -1,9 +1,5 @@
-ruamel.yaml
-selenium==4.2.0
+urllib
 requests
-selenium-wire==4.6.5
-youtube-search-python==1.6.6
-PyMySQL==1.0.2
-undetected_chromedriver==3.1.5
-DBUtils==3.0.2
-mysqlclient==2.1.1
+traceback
+xlrd
+xlwt
