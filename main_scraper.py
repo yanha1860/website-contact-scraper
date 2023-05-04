@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 import re
 import xlwt
 import xlrd
@@ -46,33 +44,46 @@ def _dowload_html_text(url):
     return html;    
 
 def _scrape_next_urls(url) -> set():
+    # 获取网页内容
     soup = _get_soup(url);
+    # 存储下一级链接的集合
     next_urls = set();
+    # 获取基础URL
     base_url = '';
     if '/' in url[-1]:
         base_url = url[0:len(url) - 1];
     else:
         base_url = url;
+    # 获取域名
     domain = urlparse(url).netloc;
+    # 查找所有链接
     links = soup.findAll("a");
     for link in links:
         try :
+            # 获取链接地址
             link_href = link.attrs['href'];
+            # 如果链接地址长度小于等于1，则跳过
             if len(link_href) <= 1 :
                 continue; 
+            # 如果链接地址包含http并且域名不在其中，则跳过
             if 'http' in link_href and domain not in link_href:  
                 continue;
+            # 如果链接地址不包含'contact'和'about'，则跳过
             if ('contact' not in link_href 
                     and 'about' not in link_href):
                 continue;
+            # 如果链接地址包含http并且域名在其中，则添加到集合中
             elif 'http' in link_href and domain in link_href:
                 next_urls.add(link_href);
+            # 如果链接地址不包含http并且包含'/'，则添加到集合中
             elif 'http' not in link_href and '/' in link_href:
                 next_urls.add(base_url + link_href);
             
         except Exception as e:
+            # 如果出现异常，则跳过
             pass;
     
+    # 返回集合
     return next_urls;
         
 def _scrape_html_emails(html):
